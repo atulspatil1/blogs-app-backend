@@ -2,6 +2,7 @@ package org.atulspatil1.blogsappbackend.security;
 
 import lombok.RequiredArgsConstructor;
 import org.atulspatil1.blogsappbackend.model.User;
+import org.atulspatil1.blogsappbackend.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,12 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserReposiotry userReposiotry;
+    private final UserRepository userReposiotry;
 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
     {
         User user = userReposiotry.findByEmail(email)
-                .oeElseThrow(() -> new UsernameNotFoundException("User not found with email " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + email));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
