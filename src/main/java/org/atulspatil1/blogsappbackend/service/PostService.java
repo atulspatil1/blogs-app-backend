@@ -182,7 +182,7 @@ public class PostService {
                 .comments(post.getComments() == null ? null :
                         post.getComments().stream()
                                 .filter(Comment::getApproved)
-                                .map(c -> com.blogsappbackend.dto.response.CommentResponse.builder()
+                                .map(c -> org.atulspatil1.blogsappbackend.dto.CommentResponse.builder()
                                         .id(c.getId())
                                         .authorName(c.getAuthorName())
                                         .body(c.getBody())

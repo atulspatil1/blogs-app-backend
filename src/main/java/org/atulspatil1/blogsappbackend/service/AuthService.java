@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.atulspatil1.blogsappbackend.dto.AuthResponse;
 import org.atulspatil1.blogsappbackend.dto.request.LoginRequest;
+import org.atulspatil1.blogsappbackend.model.User;
 import org.atulspatil1.blogsappbackend.repository.UserRepository;
 import org.atulspatil1.blogsappbackend.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public AuthResponse login(@Valid @org.jetbrains.annotations.UnknownNullability LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );

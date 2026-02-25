@@ -37,6 +37,12 @@ public class SecurityConfig {
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigin;
 
+    private static final String[] SPRINGDOC_ENDPOINTS = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http
@@ -52,6 +58,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/comments").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                     //Springdoc endpoints
+                    .requestMatchers(SPRINGDOC_ENDPOINTS).permitAll()
                     //Everything else requires authentication
                     .anyRequest().authenticated()
                 )
@@ -70,7 +78,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 
