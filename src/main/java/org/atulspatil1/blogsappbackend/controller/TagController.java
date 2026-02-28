@@ -1,6 +1,7 @@
 package org.atulspatil1.blogsappbackend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.atulspatil1.blogsappbackend.config.ApiRoutes;
 import org.atulspatil1.blogsappbackend.dto.TagResponse;
 import org.atulspatil1.blogsappbackend.service.TagService;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tags")
+@RequestMapping({ApiRoutes.TAGS_V1, ApiRoutes.TAGS_LEGACY})
 @RequiredArgsConstructor
 public class TagController {
 

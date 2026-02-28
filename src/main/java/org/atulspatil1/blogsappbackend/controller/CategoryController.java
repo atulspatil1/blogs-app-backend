@@ -1,6 +1,7 @@
 package org.atulspatil1.blogsappbackend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.atulspatil1.blogsappbackend.config.ApiRoutes;
 import org.atulspatil1.blogsappbackend.dto.CategoryResponse;
 import org.atulspatil1.blogsappbackend.service.CategoryService;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping({ApiRoutes.CATEGORIES_V1, ApiRoutes.CATEGORIES_LEGACY})
 @RequiredArgsConstructor
 public class CategoryController {
 
