@@ -2,6 +2,7 @@ package org.atulspatil1.blogsappbackend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.atulspatil1.blogsappbackend.config.ApiRoutes;
 import org.atulspatil1.blogsappbackend.dto.CommentResponse;
 import org.atulspatil1.blogsappbackend.dto.request.CommentRequest;
 import org.atulspatil1.blogsappbackend.service.CommentService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping({ApiRoutes.COMMENTS_V1, ApiRoutes.COMMENTS_LEGACY})
 @RequiredArgsConstructor
 public class CommentController {
 
