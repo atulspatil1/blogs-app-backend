@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -94,12 +95,16 @@ public class PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
 
         post.setTitle(request.getTitle());
-        post.setSlug(request.getSlug() != null ? request.getSlug() : slugify(request.getTitle()));
+        post.setSlug(resolveUpdateSlug(post, request));
         post.setSummary(request.getSummary());
         post.setContent(request.getContent());
         post.setCoverImageUrl(request.getCoverImageUrl());
-        post.setCategories(resolveCategoriesByIds(request.getCategoryIds()));
-        post.setTags(resolveTagsByIds(request.getTagIds()));
+        if(request.getCategoryIds() != null) {
+            post.setCategories(resolveCategoriesByIds(request.getCategoryIds()));
+        }
+        if(request.getTagIds() != null) {
+            post.setTags(resolveTagsByIds(request.getTagIds()));
+        }
 
         if(request.getStatus() == Post.Status.PUBLISHED && post.getPublishedAt() == null) {
             post.setPublishedAt(LocalDateTime.now());
@@ -123,6 +128,13 @@ public class PostService {
                 : slugify(request.getTitle());
     }
 
+    private String resolveUpdateSlug(Post post, PostRequest request) {
+        if (request.getSlug() != null && !request.getSlug().isBlank()) {
+            return request.getSlug();
+        }
+        return post.getSlug();
+    }
+
     public static String slugify(String input) {
         return input.toLowerCase()
                 .replaceAll("[^a-z0-9\\s-]", "")
@@ -133,7 +145,7 @@ public class PostService {
 
     private Set<Category> resolveCategoriesByIds(Set<Long> ids) {
         if(ids == null || ids.isEmpty())
-            return Set.of();
+            return new HashSet<>();
 
         return ids.stream()
                 .map(id -> categoryRepository.findById(id)
@@ -143,7 +155,7 @@ public class PostService {
 
     private Set<Tag> resolveTagsByIds(Set<Long> ids) {
         if(ids == null || ids.isEmpty())
-            return Set.of();
+            return new HashSet<>();
 
         return ids.stream()
                 .map(id -> tagRepository.findById(id)
