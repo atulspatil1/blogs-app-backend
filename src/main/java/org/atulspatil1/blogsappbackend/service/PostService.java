@@ -1,6 +1,7 @@
 package org.atulspatil1.blogsappbackend.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.atulspatil1.blogsappbackend.dto.PostDetailResponse;
 import org.atulspatil1.blogsappbackend.dto.PostSummaryResponse;
 import org.atulspatil1.blogsappbackend.dto.request.PostRequest;
@@ -23,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PostService {
 
@@ -86,7 +88,10 @@ public class PostService {
             post.setPublishedAt(LocalDateTime.now());
         }
 
-        return toDetail(postRepository.save(post));
+        Post savedPost = postRepository.save(post);
+        log.info("event=post.created postId={} slug={} status={} author={}",
+                savedPost.getId(), savedPost.getSlug(), savedPost.getStatus(), authorEmail);
+        return toDetail(savedPost);
     }
 
     @Transactional
@@ -111,7 +116,10 @@ public class PostService {
         }
         post.setStatus(request.getStatus());
 
-        return toDetail(postRepository.save(post));
+        Post updatedPost = postRepository.save(post);
+        log.info("event=post.updated postId={} slug={} status={}",
+                updatedPost.getId(), updatedPost.getSlug(), updatedPost.getStatus());
+        return toDetail(updatedPost);
     }
 
     public void deletePost(Long id) {
@@ -119,6 +127,7 @@ public class PostService {
             throw new ResourceNotFoundException("Post not found with id: " + id);
         }
         postRepository.deleteById(id);
+        log.info("event=post.deleted postId={}", id);
     }
 
     //Helpers
