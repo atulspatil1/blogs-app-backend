@@ -2,6 +2,7 @@ package org.atulspatil1.blogsappbackend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.atulspatil1.blogsappbackend.config.ApiRoutes;
 import org.atulspatil1.blogsappbackend.dto.PostDetailResponse;
 import org.atulspatil1.blogsappbackend.dto.PostSummaryResponse;
 import org.atulspatil1.blogsappbackend.dto.request.PostRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping({ApiRoutes.POSTS_V1, ApiRoutes.POSTS_LEGACY})
 @RequiredArgsConstructor
 public class PostController {
 

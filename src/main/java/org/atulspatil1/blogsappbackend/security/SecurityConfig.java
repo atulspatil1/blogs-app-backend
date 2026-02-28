@@ -1,6 +1,7 @@
 package org.atulspatil1.blogsappbackend.security;
 
 import lombok.RequiredArgsConstructor;
+import org.atulspatil1.blogsappbackend.config.ApiRoutes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,8 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAccessDeniedHandler restAccessDeniedHandler;
 
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigin;
@@ -49,15 +52,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(eh -> eh
+                        .authenticationEntryPoint(restAuthenticationEntryPoint)
+                        .accessDeniedHandler(restAccessDeniedHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
                     //Public endpoints
-                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/tags/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/comments").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, ApiRoutes.LOGIN_V1, ApiRoutes.LOGIN_LEGACY).permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiRoutes.POSTS_ALL_V1, ApiRoutes.POSTS_ALL_LEGACY).permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiRoutes.CATEGORIES_ALL_V1, ApiRoutes.CATEGORIES_ALL_LEGACY).permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiRoutes.TAGS_ALL_V1, ApiRoutes.TAGS_ALL_LEGACY).permitAll()
+                    .requestMatchers(HttpMethod.POST, ApiRoutes.COMMENTS).permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiRoutes.COMMENTS_ALL_V1, ApiRoutes.COMMENTS_ALL_LEGACY).permitAll()
                      //Springdoc endpoints
                     .requestMatchers(SPRINGDOC_ENDPOINTS).permitAll()
                     //Everything else requires authentication

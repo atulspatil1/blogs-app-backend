@@ -2,6 +2,7 @@ package org.atulspatil1.blogsappbackend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.atulspatil1.blogsappbackend.config.ApiRoutes;
 import org.atulspatil1.blogsappbackend.dto.AuthResponse;
 import org.atulspatil1.blogsappbackend.dto.request.LoginRequest;
 import org.atulspatil1.blogsappbackend.service.AuthService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping({ApiRoutes.AUTH_V1, ApiRoutes.AUTH_LEGACY})
 @RequiredArgsConstructor
 public class AuthController {
 
