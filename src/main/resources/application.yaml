@@ -11,7 +11,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate :
         format_sql: true
@@ -35,3 +35,9 @@ app:
   # CORS - allow React dev server
   cors:
     allowed-origins: http://localhost:5173/
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [traceId=%X{traceId:-}] %logger{36} - %msg%n"
+  level:
+    root: INFO

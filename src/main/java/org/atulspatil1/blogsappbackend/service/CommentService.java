@@ -1,6 +1,7 @@
 package org.atulspatil1.blogsappbackend.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.atulspatil1.blogsappbackend.dto.CommentResponse;
 import org.atulspatil1.blogsappbackend.dto.request.CommentRequest;
 import org.atulspatil1.blogsappbackend.exception.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CommentService {
 
@@ -32,7 +34,10 @@ public class CommentService {
                 .approved(false)
                 .build();
 
-        return toResponse(commentRepository.save(comment));
+        Comment savedComment = commentRepository.save(comment);
+        log.info("event=comment.submitted commentId={} postId={} approved={}",
+                savedComment.getId(), request.getPostId(), savedComment.getApproved());
+        return toResponse(savedComment);
     }
 
     public List<CommentResponse> getApprovedComments(Long postId) {
@@ -50,7 +55,9 @@ public class CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found:" + id));
         comment.setApproved(true);
-        return toResponse(commentRepository.save(comment));
+        Comment approvedComment = commentRepository.save(comment);
+        log.info("event=comment.approved commentId={}", id);
+        return toResponse(approvedComment);
     }
 
     public void deleteComment(Long id) {
@@ -58,6 +65,7 @@ public class CommentService {
             throw new ResourceNotFoundException("Comment not found:" + id);
         }
         commentRepository.deleteById(id);
+        log.info("event=comment.deleted commentId={}", id);
     }
 
     private CommentResponse toResponse(Comment comment) {
