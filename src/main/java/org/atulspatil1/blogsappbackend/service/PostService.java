@@ -6,6 +6,7 @@ import org.atulspatil1.blogsappbackend.dto.PostDetailResponse;
 import org.atulspatil1.blogsappbackend.dto.PostSummaryResponse;
 import org.atulspatil1.blogsappbackend.dto.request.PostRequest;
 import org.atulspatil1.blogsappbackend.exception.ResourceNotFoundException;
+import org.atulspatil1.blogsappbackend.mapper.PostMapper;
 import org.atulspatil1.blogsappbackend.model.*;
 import org.atulspatil1.blogsappbackend.repository.CategoryRepository;
 import org.atulspatil1.blogsappbackend.repository.PostRepository;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,18 +34,19 @@ public class PostService {
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
+    private final PostMapper postMapper;
 
     //Public
     public Page<PostSummaryResponse> getPublishedPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
         return postRepository.findByStatus(Post.Status.PUBLISHED, pageable)
-                .map(this::toSummary);
+                .map(postMapper::toSummary);
     }
 
     public PostDetailResponse getPostBySlug(String slug) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with slug: " + slug));
-        return toDetail(post);
+        return postMapper.toDetail(post);
     }
 
     public Page<PostSummaryResponse> getPostsByCategory(String categorySlug, int page, int size) {
@@ -91,7 +94,7 @@ public class PostService {
         Post savedPost = postRepository.save(post);
         log.info("event=post.created postId={} slug={} status={} author={}",
                 savedPost.getId(), savedPost.getSlug(), savedPost.getStatus(), authorEmail);
-        return toDetail(savedPost);
+        return postMapper.toDetail(savedPost);
     }
 
     @Transactional
@@ -119,7 +122,7 @@ public class PostService {
         Post updatedPost = postRepository.save(post);
         log.info("event=post.updated postId={} slug={} status={}",
                 updatedPost.getId(), updatedPost.getSlug(), updatedPost.getStatus());
-        return toDetail(updatedPost);
+        return postMapper.toDetail(updatedPost);
     }
 
     public void deletePost(Long id) {
@@ -132,22 +135,39 @@ public class PostService {
 
     //Helpers
     private String resolveSlug(PostRequest request) {
-        return (request.getSlug() != null && !request.getSlug().isBlank())
+        String baseSlug = (request.getSlug() != null && !request.getSlug().isBlank())
                 ? request.getSlug()
                 : slugify(request.getTitle());
+        return ensureUniqueSlug(baseSlug, null);
     }
 
     private String resolveUpdateSlug(Post post, PostRequest request) {
         if (request.getSlug() != null && !request.getSlug().isBlank()) {
-            return request.getSlug();
+            return ensureUniqueSlug(request.getSlug(), post.getId());
         }
         return post.getSlug();
+    }
+
+    private String ensureUniqueSlug(String baseSlug, Long excludePostId) {
+        String candidate = baseSlug;
+        int suffix = 2;
+        while (postRepository.existsBySlug(candidate)) {
+            // If this slug belongs to the post being updated, it's fine
+            if (excludePostId != null) {
+                Optional<Post> existing = postRepository.findBySlug(candidate);
+                if (existing.isPresent() && existing.get().getId() == excludePostId) {
+                    return candidate;
+                }
+            }
+            candidate = baseSlug + "-" + suffix++;
+        }
+        return candidate;
     }
 
     public static String slugify(String input) {
         return input.toLowerCase()
                 .replaceAll("[^a-z0-9\\s-]", "")
-                .replaceAll("\\s+", "")
+                .replaceAll("\\s+", "-")
                 .replaceAll("-+", "-")
                 .strip();
     }
@@ -172,48 +192,4 @@ public class PostService {
                 .collect(Collectors.toSet());
     }
 
-    private PostSummaryResponse toSummary(Post post) {
-        return PostSummaryResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .slug(post.getSlug())
-                .summary(post.getSummary())
-                .coverImageUrl(post.getCoverImageUrl())
-                .status(post.getStatus().name())
-                .authorUsername(post.getAuthor().getUsername())
-                .categories(post.getCategories().stream().map(Category::getName).collect(Collectors.toSet()))
-                .tags(post.getTags().stream().map(Tag::getName).collect(Collectors.toSet()))
-                .publishedAt(post.getPublishedAt())
-                .createdAt(post.getCreatedAt())
-                .build();
-    }
-
-    private PostDetailResponse toDetail(Post post) {
-        return PostDetailResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .slug(post.getSlug())
-                .summary(post.getSummary())
-                .content(post.getContent())
-                .coverImageUrl(post.getCoverImageUrl())
-                .status(post.getStatus().name())
-                .authorUsername(post.getAuthor().getUsername())
-                .categories(post.getCategories().stream().map(Category::getName).collect(Collectors.toSet()))
-                .tags(post.getTags().stream().map(Tag::getName).collect(Collectors.toSet()))
-                .comments(post.getComments() == null ? null :
-                        post.getComments().stream()
-                                .filter(Comment::getApproved)
-                                .map(c -> org.atulspatil1.blogsappbackend.dto.CommentResponse.builder()
-                                        .id(c.getId())
-                                        .authorName(c.getAuthorName())
-                                        .body(c.getBody())
-                                        .approved(c.getApproved())
-                                        .createdAt(c.getCreatedAt())
-                                        .build())
-                                .collect(Collectors.toList()))
-                .publishedAt(post.getPublishedAt())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
-                .build();
-    }
 }
