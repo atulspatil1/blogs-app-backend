@@ -13,6 +13,8 @@ public interface PostRepository extends JpaRepository <Post, Long> {
 
     Optional<Post> findBySlug(String slug);
 
+    boolean existsBySlug(String slug);
+
     Page<Post> findByStatus(Post.Status status, Pageable pageable);
 
     @Query("SELECT p FROM Post p JOIN p.categories c WHERE c.slug = :slug AND p.status = 'PUBLISHED'")

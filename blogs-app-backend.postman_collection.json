@@ -1,0 +1,729 @@
+{
+  "info": {
+    "_postman_id": "f8a0624e-6c1a-43f4-b437-83f981db3138",
+    "name": "Blogs App Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33526064"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\" : \"atulspatil82@gmail.com\",\n    \"password\" : \"Atul1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Categories",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/categories",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post Comment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"postId\": 2,\n  \"authorName\": \"Kiran\",\n  \"email\": \"kiran@gmail.com\",\n  \"body\": \"Helpful infirmation !\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/comments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "comments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Comment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/comments/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "comments",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Pending Comments",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/comments/admin/pending",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "comments",
+            "admin",
+            "pending"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Approve Pending Comments",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/comments/admin/2/approve",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "comments",
+            "admin",
+            "2",
+            "approve"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Comment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/comments/admin/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "comments",
+            "admin",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Tags",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/tags",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "tags"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Posts",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts?page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0",
+              "type": "text"
+            },
+            {
+              "key": "size",
+              "value": "10",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Posts by Slug",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/getting-started-spring-boot-jwt",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "getting-started-spring-boot-jwt"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Posts by Category Slug",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/category/java",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "category",
+            "java"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Posts by Tag Slug",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/tag/jwt",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "tag",
+            "jwt"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Posts by Search",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/search?query=getting&page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "query",
+              "value": "getting",
+              "type": "text"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[Admin] Get Posts",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMDg0MjQyLCJleHAiOjE3NzIxNzA2NDJ9.tCB17y1o1U0fK691z7yXvOcjfWwlahp5KNydVMclxm5pHWkYDrrqY_O5LSs6ucI5IKgKCblBcHS9m-puiC2Bjg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/admin/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "admin",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[Admin] Post Post",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMjY3NzIxLCJleHAiOjE3NzIzNTQxMjF9.vW9-4zj-4qMRXDcwjkvzlLTMo8PuUX1QfAVeVeWJGzAy8SBdktlwTzEA05i43HhzKRpchQfUjH6EwyfSL4PDZQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Agentic AI\",\n  \"summary\": \"Agentic AI - Artificial intelligence\",\n  \"content\": \"Agentic AI - Artificial intelligence\",\n  \"coverImageUrl\": \"/ai.png\",\n  \"status\": \"DRAFT\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[Admin] Update Post",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMjY4NzU2LCJleHAiOjE3NzIzNTUxNTZ9.DVpAj-bjh0I7QBlfv8IAs__e9LiJNui6DOuhowcf2jaTHz_lRXVtETa-woMLn3rGVQ-4bxLZ7Y7S2qgxgthHBA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"11 New Agentic AI\",\n  \"summary\": \"11 New Agentic AI - Artificial intelligence\",\n  \"content\": \"11 Updated Agentic AI - Artificial intelligence\",\n  \"coverImageUrl\": \"/agent.png\",\n  \"status\": \"DRAFT\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[Admin] Delete Post",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhdHVsc3BhdGlsODJAZ21haWwuY29tIiwiaWF0IjoxNzcyMjY4NzU2LCJleHAiOjE3NzIzNTUxNTZ9.DVpAj-bjh0I7QBlfv8IAs__e9LiJNui6DOuhowcf2jaTHz_lRXVtETa-woMLn3rGVQ-4bxLZ7Y7S2qgxgthHBA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/posts/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "posts",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}

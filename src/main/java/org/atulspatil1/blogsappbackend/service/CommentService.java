@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.atulspatil1.blogsappbackend.dto.CommentResponse;
 import org.atulspatil1.blogsappbackend.dto.request.CommentRequest;
 import org.atulspatil1.blogsappbackend.exception.ResourceNotFoundException;
+import org.atulspatil1.blogsappbackend.mapper.CommentMapper;
 import org.atulspatil1.blogsappbackend.model.Comment;
 import org.atulspatil1.blogsappbackend.model.Post;
 import org.atulspatil1.blogsappbackend.repository.CommentRepository;
@@ -12,7 +13,6 @@ import org.atulspatil1.blogsappbackend.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -21,6 +21,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final CommentMapper commentMapper;
 
     public CommentResponse submitComment(CommentRequest request) {
         Post post = postRepository.findById(request.getPostId())
@@ -37,18 +38,16 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
         log.info("event=comment.submitted commentId={} postId={} approved={}",
                 savedComment.getId(), request.getPostId(), savedComment.getApproved());
-        return toResponse(savedComment);
+        return commentMapper.toResponse(savedComment);
     }
 
     public List<CommentResponse> getApprovedComments(Long postId) {
-        return commentRepository.findByPostIdAndApprovedTrue(postId)
-                .stream().map(this::toResponse).collect(Collectors.toList());
+        return commentMapper.toResponseList(commentRepository.findByPostIdAndApprovedTrue(postId));
     }
 
     //Admin
     public List<CommentResponse> getPendingComments() {
-        return commentRepository.findByApprovedFalse()
-                .stream().map(this::toResponse).collect(Collectors.toList());
+        return commentMapper.toResponseList(commentRepository.findByApprovedFalse());
     }
 
     public CommentResponse approveComment(Long id) {
@@ -57,7 +56,7 @@ public class CommentService {
         comment.setApproved(true);
         Comment approvedComment = commentRepository.save(comment);
         log.info("event=comment.approved commentId={}", id);
-        return toResponse(approvedComment);
+        return commentMapper.toResponse(approvedComment);
     }
 
     public void deleteComment(Long id) {
@@ -66,15 +65,5 @@ public class CommentService {
         }
         commentRepository.deleteById(id);
         log.info("event=comment.deleted commentId={}", id);
-    }
-
-    private CommentResponse toResponse(Comment comment) {
-        return CommentResponse.builder()
-                .id(comment.getId())
-                .authorName(comment.getAuthorName())
-                .body(comment.getBody())
-                .approved(comment.getApproved())
-                .createdAt(comment.getCreatedAt())
-                .build();
     }
 }
