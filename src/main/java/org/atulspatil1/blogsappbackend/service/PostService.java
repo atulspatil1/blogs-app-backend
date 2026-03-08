@@ -37,37 +37,43 @@ public class PostService {
     private final PostMapper postMapper;
 
     //Public
+    @Transactional(readOnly = true)
     public Page<PostSummaryResponse> getPublishedPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
-        return postRepository.findByStatus(Post.Status.PUBLISHED, pageable)
+        return postRepository.findByStatusWithRelations(Post.Status.PUBLISHED, pageable)
                 .map(postMapper::toSummary);
     }
 
+    @Transactional(readOnly = true)
     public PostDetailResponse getPostBySlug(String slug) {
-        Post post = postRepository.findBySlug(slug)
+        Post post = postRepository.findBySlugWithRelations(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with slug: " + slug));
         return postMapper.toDetail(post);
     }
 
+    @Transactional(readOnly = true)
     public Page<PostSummaryResponse> getPostsByCategory(String categorySlug, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
-        return postRepository.findPublishedByCategorySlug(categorySlug, pageable).map(this::toSummary);
+        return postRepository.findPublishedByCategorySlug(categorySlug, pageable).map(postMapper::toSummary);
     }
 
+    @Transactional(readOnly = true)
     public Page<PostSummaryResponse> getPostsByTag(String tagSlug, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
-        return postRepository.findPublishedByTagSlug(tagSlug, pageable).map(this::toSummary);
+        return postRepository.findPublishedByTagSlug(tagSlug, pageable).map(postMapper::toSummary);
     }
 
+    @Transactional(readOnly = true)
     public Page<PostSummaryResponse> searchPosts(String query, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
-        return postRepository.searchPublished(query, pageable).map(this::toSummary);
+        return postRepository.searchPublished(query, pageable).map(postMapper::toSummary);
     }
 
     //Admin
+    @Transactional(readOnly = true)
     public Page<PostSummaryResponse> getAllPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return postRepository.findAll(pageable).map(this::toSummary);
+        return postRepository.findAllWithRelations(pageable).map(postMapper::toSummary);
     }
 
     @Transactional
