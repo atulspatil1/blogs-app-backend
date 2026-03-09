@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  flyway:
+    enabled: false
+
+app:
+  jwt:
+    secret: 7a3f8c2e1b9d4f6a0e5c8b3d7f2a9e4c1b8d5f3a7e2c9b6d4f1a8e5c2b9d7f4a
+    expiration-ms: 86400000
+
+  cors:
+    allowed-origins: http://localhost:3000/
