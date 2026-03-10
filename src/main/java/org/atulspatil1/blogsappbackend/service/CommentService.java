@@ -13,16 +13,19 @@ import org.atulspatil1.blogsappbackend.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final CommentMapper commentMapper;
 
+    @Transactional
     public CommentResponse submitComment(CommentRequest request) {
         Post post = postRepository.findById(request.getPostId())
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found: " + request.getPostId()));
@@ -50,6 +53,7 @@ public class CommentService {
         return commentMapper.toResponseList(commentRepository.findByApprovedFalse());
     }
 
+    @Transactional
     public CommentResponse approveComment(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found:" + id));
@@ -59,6 +63,7 @@ public class CommentService {
         return commentMapper.toResponse(approvedComment);
     }
 
+    @Transactional
     public void deleteComment(Long id) {
         if(!commentRepository.existsById(id)) {
             throw new ResourceNotFoundException("Comment not found:" + id);
