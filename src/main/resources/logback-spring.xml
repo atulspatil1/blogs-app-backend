@@ -17,6 +17,7 @@
 
     <!-- AXIOM Appender (Streams logs directly to Axiom UI asynchronously) -->
     <appender name="AXIOM" class="io.github.yhsj.axiom.AxiomAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
         <!-- These will be provided via Environment Variables in Prod -->
         <dataset>${AXIOM_DATASET:-blogs-app-logs}</dataset>
         <token>${AXIOM_TOKEN:-dummy-token}</token>
