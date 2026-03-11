@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Console appender for local development (Human Readable) -->
+    <appender name="CONSOLE_DEV" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%thread] [traceId=%X{traceId:-}, user=%X{username:-}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- JSON Console appender for Production backup -->
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Includes all MDC variables (traceId, username, role) into the JSON automatically -->
+        </encoder>
+    </appender>
+
+    <!-- AXIOM Appender (Streams logs directly to Axiom UI asynchronously) -->
+    <appender name="AXIOM" class="io.github.yhsj.axiom.AxiomAppender">
+        <!-- These will be provided via Environment Variables in Prod -->
+        <dataset>${AXIOM_DATASET:-blogs-app-logs}</dataset>
+        <token>${AXIOM_TOKEN:-dummy-token}</token>
+        <orgId>${AXIOM_ORG_ID:-dummy-org}</orgId>
+    </appender>
+
+
+    <!-- ACTIVE PROFILES -->
+
+    <!-- Local Development: Only print nicely formatted text to console -->
+    <springProfile name="dev | default">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_DEV" />
+        </root>
+    </springProfile>
+
+    <!-- Production: Output JSON to console, AND stream to Axiom -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_JSON" />
+            <appender-ref ref="AXIOM" />
+        </root>
+    </springProfile>
+
+</configuration>
