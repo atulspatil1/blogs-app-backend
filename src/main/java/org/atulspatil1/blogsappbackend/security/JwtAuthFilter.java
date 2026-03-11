@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority;
+import org.slf4j.MDC;
 
 @Component
 @Slf4j
@@ -47,6 +50,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                    // Inject the username and role into SLF4J MDC so all subsequent logs have user context
+                    MDC.put("username", userDetails.getUsername());
+                    String roles = userDetails.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.joining(","));
+                    MDC.put("role", roles);
                 }
             }
 
@@ -55,6 +65,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.warn("event=security.jwt.invalid path={}", request.getRequestURI());
         }
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            // Make sure to clean up the MDC so another thread doesn't accidentally reuse it!
+            MDC.remove("username");
+            MDC.remove("role");
+        }
     }
 }
