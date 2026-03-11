@@ -1,5 +1,6 @@
 spring:
   datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/personal_blog_db}
     hikari:
       maximum-pool-size: 15
       minimum-idle: 5
